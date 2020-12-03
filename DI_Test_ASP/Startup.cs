@@ -1,3 +1,4 @@
+using DI_Test_ASP.Middleware;
 using DI_Test_ASP.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -17,7 +18,9 @@ namespace DI_Test_ASP
         {
             services.AddMvc();
             services.AddTransient<IMessageSender, EmailMessageSender>();
+            services.AddTransient<IEmployeesService, EmployeeService>();
             services.AddTransient<TimeService>();
+            services.AddTransient<MyTimeService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -28,6 +31,8 @@ namespace DI_Test_ASP
             }
 
             app.UseRouting();
+
+            app.UseMiddleware<TimerMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {
